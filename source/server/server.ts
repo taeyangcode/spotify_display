@@ -18,11 +18,18 @@ export class Server {
         });
 
         this.homeEndpoint(this._APP);
+        this.handlerEndpoint(this._APP);
     }
 
     private homeEndpoint(app: Express): void {
         app.get("/", (request: Request, response: Response): void => {
             Authorization.requestOAuthData(response);
+        });
+    }
+
+    private handlerEndpoint(app: Express): void {
+        app.get("/handler", (request: Request, response: Response): void => {
+            Authorization.OAuthCallback(request, response);
         });
     }
 }

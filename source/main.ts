@@ -1,6 +1,5 @@
 import { EnvHelper } from "./env/env-helper";
 import { Server } from "./server/server";
-import { Authorization } from "./spotify/authorization";
 
 EnvHelper.envConfig(".env.spotify");
 

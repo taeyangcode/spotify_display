@@ -18,10 +18,16 @@ class Server {
             console.log(`spotify_display working on port: ${this._PORT}`);
         });
         this.homeEndpoint(this._APP);
+        this.handlerEndpoint(this._APP);
     }
     homeEndpoint(app) {
         app.get("/", (request, response) => {
             authorization_1.Authorization.requestOAuthData(response);
+        });
+    }
+    handlerEndpoint(app) {
+        app.get("/handler", (request, response) => {
+            authorization_1.Authorization.OAuthCallback(request, response);
         });
     }
 }

@@ -20,7 +20,7 @@ export class EnvHelper {
         return this.getValue("SPOTIFY_CLIENT_ID");
     } 
 
-    public static getSpotifyClientSecret(): string | undefined {
+    public static getSpotifyClientSecret(): string {
         return this.getValue("SPOTIFY_CLIENT_SECRET");
     }
 }
