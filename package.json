@@ -1,0 +1,22 @@
+{
+  "name": "spotify_display",
+  "version": "0.0.1",
+  "description": "TBD",
+  "main": "source/main.ts",
+  "scripts": {
+    "start": "tsc && node ./build/source/main.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/taeyangcode/spotify_display.git"
+  },
+  "author": "장태양",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/taeyangcode/spotify_display/issues"
+  },
+  "homepage": "https://github.com/taeyangcode/spotify_display#readme",
+  "devDependencies": {
+    "typescript": "^4.7.4"
+  }
+}
