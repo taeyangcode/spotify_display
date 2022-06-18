@@ -1,12 +1,9 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.EnvHelper = void 0;
-const dotenv_1 = require("dotenv");
-class EnvHelper {
+import { config } from "dotenv";
+export class EnvHelper {
     constructor() { }
     static envConfig(envFileName) {
         const path = `${process.cwd()}/environment/${envFileName}`;
-        (0, dotenv_1.config)({ path });
+        config({ path });
     }
     static getValue(variable) {
         const data = process.env[variable];
@@ -22,5 +19,4 @@ class EnvHelper {
         return this.getValue("SPOTIFY_CLIENT_SECRET");
     }
 }
-exports.EnvHelper = EnvHelper;
 //# sourceMappingURL=env-helper.js.map

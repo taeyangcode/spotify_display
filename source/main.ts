@@ -1,5 +1,5 @@
-import { EnvHelper } from "./env/env-helper";
-import { Server } from "./server/server";
+import { EnvHelper } from "./env/env-helper.js";
+import { Server } from "./server/server.js";
 
 EnvHelper.envConfig(".env.spotify");
 

@@ -1,23 +1,18 @@
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Authorization = void 0;
-const env_helper_1 = require("../env/env-helper");
-const crypto_1 = __importDefault(require("crypto"));
+import { EnvHelper } from "../env/env-helper.js";
+import crypto from "crypto";
+import fetch from "cross-fetch";
 ;
-class Authorization {
+export class Authorization {
     constructor() { }
     static randomString(length) {
-        return crypto_1.default.randomBytes(length / 2).toString("hex");
+        return crypto.randomBytes(length / 2).toString("hex");
         // https://stackoverflow.com/a/27747377
     }
     static oauthParameters() {
         return {
             scope: "user-read-currently-playing",
             state: this.randomString(16),
-            client_id: env_helper_1.EnvHelper.getSpotifyClientId(),
+            client_id: EnvHelper.getSpotifyClientId(),
             response_type: "code",
             redirect_uri: "http://localhost:3000/handler/"
         };
@@ -36,9 +31,6 @@ class Authorization {
         // Implement callback error check here!
         response.redirect(spotifyRedirectUrl + parameters.toString());
     }
-    static toBase64(input) {
-        return Buffer.from(input).toString("base64");
-    }
     static async OAuthCallback(request, response) {
         const code = request.query["code"]?.toString();
         const state = request.query["state"]?.toString();
@@ -48,26 +40,24 @@ class Authorization {
         if (state === "undefined") {
             throw Error("Invalid Spotify query state.");
         }
-        const client_id = env_helper_1.EnvHelper.getSpotifyClientId();
-        const client_secret = env_helper_1.EnvHelper.getSpotifyClientSecret();
-        const authorization = `Basic ${this.toBase64(client_id + ":" + client_secret)}`;
-        const content_type = "application/x-www-form-urlencoded";
+        const client_id = EnvHelper.getSpotifyClientId();
+        const client_secret = EnvHelper.getSpotifyClientSecret();
+        const authorization = Buffer.from(client_id + ":" + client_secret).toString("base64");
         const headers = {
-            "Content-Type": content_type,
-            "Authorization": authorization
+            "Authorization": authorization,
+            "Content-Type": "application/x-www-form-urlencoded"
         };
         const url = "https://accounts.spotify.com/api/token";
         const body = new URLSearchParams();
         body.append("grant_type", "authorization_code");
         body.append("code", code);
-        body.append("redirect_uri", "http://localhost:3000/");
-        const data = await fetch(url, {
+        body.append("redirect_uri", "http://localhost:3000/handler/");
+        const options = {
             method: "POST",
             headers,
-            body
-        });
-        console.log(data);
+            body: body.toString()
+        };
+        console.log(await fetch(url, options));
     }
 }
-exports.Authorization = Authorization;
 //# sourceMappingURL=authorization.js.map

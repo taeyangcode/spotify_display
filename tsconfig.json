@@ -2,12 +2,11 @@
     "compilerOptions": {
         "lib": ["ES2022", "DOM"],
         "target": "ESNext",
-        "module": "CommonJS",
+        "module": "ESNext",
+        "moduleResolution": "node",
 
         "strict": true,
         "esModuleInterop": true,
-        "forceConsistentCasingInFileNames": true,
-        "moduleResolution": "Node",
         "outDir": "./build",
         "rootDir": ".",
         "sourceMap": true 

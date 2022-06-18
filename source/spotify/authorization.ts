@@ -1,6 +1,7 @@
-import { EnvHelper } from "../env/env-helper";
+import { EnvHelper } from "../env/env-helper.js";
 import crypto from "crypto";
 import { Request, Response } from "express";
+import fetch from "cross-fetch";
 
 interface OAuthParameters {
     scope: string;
@@ -46,10 +47,6 @@ export class Authorization {
         response.redirect(spotifyRedirectUrl + parameters.toString());
     }
 
-    private static toBase64(input: string): string {
-        return Buffer.from(input).toString("base64");
-    }
-
     public static async OAuthCallback(request: Request, response: Response): Promise<void | never> {
         const code: string | undefined = request.query["code"]?.toString(); 
         const state: string | undefined = request.query["state"]?.toString(); 
@@ -64,25 +61,24 @@ export class Authorization {
         const client_id: string = EnvHelper.getSpotifyClientId();
         const client_secret: string = EnvHelper.getSpotifyClientSecret();
 
-        const authorization: string = `Basic ${this.toBase64(client_id + ":" + client_secret)}`;
-        const content_type: string = "application/x-www-form-urlencoded";
+        const authorization: string = Buffer.from(client_id + ":" + client_secret).toString("base64"); 
         const headers: HeadersInit = {
-            "Content-Type": content_type,
-            "Authorization": authorization 
+            "Authorization": authorization, 
+            "Content-Type": "application/x-www-form-urlencoded"
         };
 
         const url: string = "https://accounts.spotify.com/api/token";
         const body: URLSearchParams = new URLSearchParams();
         body.append("grant_type", "authorization_code");
         body.append("code", code!);
-        body.append("redirect_uri", "http://localhost:3000/");
+        body.append("redirect_uri", "http://localhost:3000/handler/");
 
-
-        const data = await fetch(url, {
+        const options: Object = {
             method: "POST",
             headers,
-            body
-        });
-        console.log(data);
+            body: body.toString()
+        };
+
+        console.log(await fetch(url, options));
     }
 }

@@ -1,19 +1,13 @@
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Server = void 0;
-const express_1 = __importDefault(require("express"));
-const authorization_1 = require("../spotify/authorization");
-class Server {
+import express from "express";
+import { Authorization } from "../spotify/authorization.js";
+export class Server {
     _PORT;
     _APP;
     constructor(port) {
         this._PORT = port;
     }
     createServer() {
-        this._APP = (0, express_1.default)();
+        this._APP = express();
         this._APP.listen(this._PORT, () => {
             console.log(`spotify_display working on port: ${this._PORT}`);
         });
@@ -22,14 +16,13 @@ class Server {
     }
     homeEndpoint(app) {
         app.get("/", (request, response) => {
-            authorization_1.Authorization.requestOAuthData(response);
+            Authorization.requestOAuthData(response);
         });
     }
     handlerEndpoint(app) {
         app.get("/handler", (request, response) => {
-            authorization_1.Authorization.OAuthCallback(request, response);
+            Authorization.OAuthCallback(request, response);
         });
     }
 }
-exports.Server = Server;
 //# sourceMappingURL=server.js.map

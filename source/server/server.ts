@@ -1,5 +1,5 @@
 import express, { Express, Request, Response } from "express";
-import { Authorization } from "../spotify/authorization";
+import { Authorization } from "../spotify/authorization.js";
 
 export class Server {
     private _PORT: number;
