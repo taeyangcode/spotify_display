@@ -1,4 +1,5 @@
 import express, { Express, Request, Response } from "express";
+import { currentTrackData } from "../spotify/api.js";
 import { Authorization } from "../spotify/authorization.js";
 
 export class Server {
@@ -28,8 +29,9 @@ export class Server {
     }
 
     private handlerEndpoint(app: Express): void {
-        app.get("/handler", (request: Request, response: Response): void => {
-            Authorization.OAuthCallback(request, response);
+        app.get("/handler", async (request: Request, response: Response): Promise<void> => {
+            const data = await Authorization.getOAuthData(request);
+            await currentTrackData(data.access_token);
         });
     }
 }
