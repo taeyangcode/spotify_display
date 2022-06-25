@@ -51,17 +51,17 @@ export class Authorization {
         const code: string | undefined = request.query["code"]?.toString(); 
         const state: string | undefined = request.query["state"]?.toString(); 
 
-        if (code === "undefined") {
+        if (typeof code === "undefined") {
             throw Error("Invalid Spotify query code.");
         }
-        if (state === "undefined") {
+        if (typeof state === "undefined") {
             throw Error("Invalid Spotify query state.")
         }
 
         const client_id: string = EnvHelper.getSpotifyClientId();
         const client_secret: string = EnvHelper.getSpotifyClientSecret();
 
-        const authorization: string = Buffer.from(client_id + ":" + client_secret).toString("base64"); 
+        const authorization: string = `Basic ${Buffer.from(client_id + ":" + client_secret).toString("base64")}`; 
         const headers: HeadersInit = {
             "Authorization": authorization, 
             "Content-Type": "application/x-www-form-urlencoded"
@@ -70,7 +70,7 @@ export class Authorization {
         const url: string = "https://accounts.spotify.com/api/token";
         const body: URLSearchParams = new URLSearchParams();
         body.append("grant_type", "authorization_code");
-        body.append("code", code!);
+        body.append("code", code);
         body.append("redirect_uri", "http://localhost:3000/handler/");
 
         const options: Object = {
