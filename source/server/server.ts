@@ -1,5 +1,4 @@
 import express, { Express, Request, Response } from "express";
-import { currentTrackData } from "../spotify/api.js";
 import { Authorization } from "../spotify/authorization.js";
 
 export class Server {
@@ -37,7 +36,7 @@ export class Server {
     private handlerEndpoint(app: Express): void {
         app.get("/handler", async (request: Request, response: Response): Promise<void> => {
             const data = await Authorization.getOAuthData(request);
-            const trackData: Record<string, any> = await currentTrackData(data.access_token);
+            response.cookie("spotify_access_token", data["access_token"]);
             response.redirect("http://localhost:3000/home.html");
         });
     }
