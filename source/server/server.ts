@@ -11,12 +11,18 @@ export class Server {
         this._PORT = port;
     }
 
+    private publicDirectoryPath(): string {
+        return `${process.cwd()}/public`;
+    }
+
     public createServer(): void {
         this._APP = express();
 
         this._APP.listen(this._PORT, (): void => {
             console.log(`spotify_display working on port: ${this._PORT}`)
         });
+
+        this._APP.use(express.static(this.publicDirectoryPath()));
 
         this.homeEndpoint(this._APP);
         this.handlerEndpoint(this._APP);
@@ -31,7 +37,8 @@ export class Server {
     private handlerEndpoint(app: Express): void {
         app.get("/handler", async (request: Request, response: Response): Promise<void> => {
             const data = await Authorization.getOAuthData(request);
-            await currentTrackData(data.access_token);
+            const trackData: Record<string, any> = await currentTrackData(data.access_token);
+            response.redirect("http://localhost:3000/home.html");
         });
     }
 }
