@@ -29,8 +29,9 @@ export class Authorization {
     }
 
     private static oauthParameters(): OAuthParameters {
+        const scopes: string = "user-modify-playback-state user-read-playback-state user-read-currently-playing user-read-recently-played user-read-playback-position user-top-read app-remote-control streaming user-read-email user-read-private user-library-modify user-library-read"
         return {
-            scope: "user-read-currently-playing",
+            scope: scopes,
             state: this.randomString(16),
             client_id: EnvHelper.getSpotifyClientId(),
             response_type: "code",

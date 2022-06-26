@@ -11,7 +11,7 @@ export class Server {
     }
 
     private publicDirectoryPath(): string {
-        return `${process.cwd()}/public`;
+        return `${process.cwd()}/build/public`;
     }
 
     public createServer(): void {
