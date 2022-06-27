@@ -3,3 +3,6 @@
 
 # .env
 /environment/.env.spotify
+
+# Build Folder
+/build
