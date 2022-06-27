@@ -5,7 +5,7 @@
   "main": "source/main.ts",
   "type": "module",
   "scripts": {
-    "start": "./build/source/main.js",
+    "start": "node ./build/source/main.js",
     "build": "copyfiles \"./source/**/*.html\" \"./source/**/*.css\" build && tsc"
   },
   "repository": {
