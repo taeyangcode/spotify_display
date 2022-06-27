@@ -50,8 +50,10 @@ function observeTrackState(state: Spotify.PlaybackState): void {
     changeTrackDetails(albumImageLink, trackName, trackArtists);
 }
 
+let player: Spotify.Player;
+
 window.onSpotifyWebPlaybackSDKReady = async (): Promise<void> => {
-    const player: Spotify.Player = new window.Spotify.Player({
+    player = new window.Spotify.Player({
         name: "Web Playback SDK",
         getOAuthToken(cb: (token: string) => any): void {
             cb(getSpotifyToken());
