@@ -40,7 +40,7 @@ function changeTrackDetails(albumImageLink: string, trackTitle: string, trackArt
 }
 
 function observeTrackState(state: Spotify.PlaybackState): void {
-    if (state.track_window.current_track.id === null) {
+    if (state.track_window.current_track.id === null || state.paused) {
         return;
     }
 

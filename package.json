@@ -6,7 +6,8 @@
   "type": "module",
   "scripts": {
     "start": "node ./build/source/main.js",
-    "build": "copyfiles \"./source/**/*.html\" \"./source/**/*.css\" build && tsc"
+    "build": "copyfiles \"./source/**/*.html\" \"./source/**/*.css\" build && tsc",
+    "dev": "npm run build && npm start"
   },
   "repository": {
     "type": "git",
