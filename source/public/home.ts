@@ -11,27 +11,43 @@ function getSpotifyToken(): string | never {
     throw Error("Cookie could not be found!");
 }
 
-interface TrackData {
-    paused: boolean;
-    lastTrackID: string | null;
-    currentTrackID: string | null;
+interface PlayerElements {
+    albumCover: HTMLImageElement;
+    trackTitle: HTMLSpanElement;
+    trackArtists: HTMLSpanElement;
 };
 
-let trackData: TrackData = {
-    paused: false,
-    lastTrackID: null,
-    currentTrackID: null
-};
+function getPlayerElements(): PlayerElements | never {
+    const albumCover: HTMLImageElement | null = document.querySelector("#album-cover-image");
+    const trackTitle: HTMLSpanElement | null = document.querySelector("#track-title");
+    const trackArtists: HTMLSpanElement | null = document.querySelector("#track-artists");
+
+    if (!albumCover || !trackTitle || !trackArtists) {
+        throw Error("Could not locate Player Element(s)!");
+    }
+    return {
+        albumCover,
+        trackTitle,
+        trackArtists
+    };
+}
+
+function changeTrackDetails(albumImageLink: string, trackTitle: string, trackArtists: string[]): void { 
+    const playerElements: PlayerElements = getPlayerElements();
+    playerElements.albumCover.src = albumImageLink;
+    playerElements.trackTitle.textContent = trackTitle;
+    playerElements.trackArtists.textContent = trackArtists.join(", ");
+}
 
 function observeTrackState(state: Spotify.PlaybackState): void {
-    const currentTrackID: string | null = state.track_window.current_track.id;
-    if (state.paused) {
-        trackData.paused = true;
+    if (state.track_window.current_track.id === null) {
+        return;
     }
-    if (trackData.currentTrackID !== currentTrackID) {
-        trackData.lastTrackID = trackData.currentTrackID;
-        trackData.currentTrackID = currentTrackID;
-    }
+
+    const albumImageLink: string = state.track_window.current_track.album.images[0].url;
+    const trackName: string = state.track_window.current_track.name;
+    const trackArtists: string[] = state.track_window.current_track.artists.map((artist: Spotify.Artist) => artist.name);
+    changeTrackDetails(albumImageLink, trackName, trackArtists);
 }
 
 window.onSpotifyWebPlaybackSDKReady = async (): Promise<void> => {
@@ -40,7 +56,7 @@ window.onSpotifyWebPlaybackSDKReady = async (): Promise<void> => {
         getOAuthToken(cb: (token: string) => any): void {
             cb(getSpotifyToken());
         },
-        volume: 0
+        volume: 0.5
     });
 
     player.on("ready", (): void => {
@@ -48,7 +64,7 @@ window.onSpotifyWebPlaybackSDKReady = async (): Promise<void> => {
     });
 
     player.on("player_state_changed", (state: Spotify.PlaybackState): void => {
-        console.log(state);
+        observeTrackState(state);
     });
 
     await player.connect();
