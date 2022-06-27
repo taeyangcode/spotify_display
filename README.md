@@ -14,6 +14,7 @@ cd spotify_display
 touch environment/.env.spotify
 
 # Compilation of program requires usage of copyfiles npm package
+npm install
 npm run build
 npm start
 
